@@ -6,15 +6,13 @@ res2 = [int(_) for _ in test_tuple]
 print(res2)
 
 class Grid:
-    def __init__(self, rows, columns, emptyValue):
-        self.xy = list([[Cell([i,j], self, emptyValue) for j,_ in enumerate(range(rows))] for i,_ in enumerate(range(columns))])
+    def __init__(self,columns, rows, emptyValue):
         self.rows = rows
         self.columns = columns
+        self.xy = list([[Cell([i,j], self, emptyValue) for j,_ in enumerate(range(columns))] for i,_ in enumerate(range(rows))])
         self.cells = []
 
     def cellSwap(self, a, b):
-
-
         
         xyA= functools.reduce(lambda sub, ele: sub * 10 + ele, a)
         xyB= functools.reduce(lambda sub, ele: sub * 10 + ele, b)
@@ -34,7 +32,10 @@ class Grid:
 #Parent
 class Cell():
     def __init__(self, xy, grid, value):
-        self.xy = xy
+        #xy->idx = y value    *    rows   + x value
+        self.idx = xy[-1:][0] * grid.rows + xy[:1][0]
+        #idx->xy      = [x = idx  /    rows  , y = idx  %   rows    ]
+        self.location = [self.idx / grid.rows, self.idx % grid.rows,]
         self.grid = grid
         self.value = value
     
@@ -90,10 +91,10 @@ test.xy[1][0].setValue('X')
 
 
 
-test.xy[0][0], test.xy[1][0] = test.xy[1][0], test.xy[0][0]
+##test.xy[0][0], test.xy[1][0] = test.xy[1][0], test.xy[0][0]
 
 #test.cellSwap([0,0],[1,0])
 print(test)
-print(test.xy[0][0].xy)
+print(test.xy[2][1].idx)
 
 #print(test.cells)
