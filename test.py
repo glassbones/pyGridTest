@@ -7,16 +7,25 @@ print(res2)
 
 class Grid:
     def __init__(self, rows, columns, emptyValue):
-        self.body = list([[Cell([-1,-1], self, '.') for _ in range(rows)] for _ in range(columns)])
+        self.xy = list([[Cell([i,j], self, emptyValue) for j,_ in enumerate(range(rows))] for i,_ in enumerate(range(columns))])
         self.rows = rows
         self.columns = columns
         self.cells = []
 
-    def insert(self, cell):
-        self.body[cell.getX()][cell.getY()] = cell.value
+    def cellSwap(self, a, b):
+
+
+        
+        xyA= functools.reduce(lambda sub, ele: sub * 10 + ele, a)
+        xyB= functools.reduce(lambda sub, ele: sub * 10 + ele, b)
+        del self.xy[xyA[:1]][xyA[1:]]
+        """
+        self.xy[xyA[:1]][xyA[1:]].xy, self.xy[xyB[:1]][xyB[1:]].xy = self.xy[xyB[:1]][xyB[1:]].xy, self.xy[xyA[:1]][xyA[1:]].xy
+        self.xy[xyA[:1]][xyA[1:]].value, self.xy[xyB[:1]][xyB[1:]].value = self.xy[xyB[:1]][xyB[1:]].value, self.xy[xyA[:1]][xyA[1:]].value
+        """
 
     def __str__(self):
-        return '\n'.join(map(str, self.body))
+        return str("\n".join(map(str, [[y.value for y in x] for x in self.xy])))
 
     def len(self):
         return self.height * self.width
@@ -32,6 +41,15 @@ class Cell():
     @classmethod
     def __str__(cls):
         return str(cls.value)
+
+    def setValue(self, val):
+        self.value = val
+
+    def setXy(self, xy):
+        self.xy = xy
+    
+    def getXy(self, xy):
+        return self.xy
 
     def getX(self):
         return [int(self.xy[:1])]
@@ -63,24 +81,19 @@ class Faller(Cell):
 
 """
 
-    
 
-
-matrix = []
-rows = 20
-
-
-for i in range(rows):
-    matrix.append(["."] * 20)
-matrix[8][2] = "X"
-
-
-
-
-
-
-test = Grid(20,10,'.')
+test = Grid(20,10,' ')
 f1 = Cell([0,2], test, 'F')
+test.xy[0][0].setValue('F')
+test.xy[1][0].setValue('X')
 #test.insert(f1)
+
+
+
+test.xy[0][0], test.xy[1][0] = test.xy[1][0], test.xy[0][0]
+
+#test.cellSwap([0,0],[1,0])
 print(test)
-print(test.cells)
+print(test.xy[0][0].xy)
+
+#print(test.cells)
